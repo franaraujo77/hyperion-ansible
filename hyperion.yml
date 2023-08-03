@@ -1,0 +1,11 @@
+---
+
+- hosts: hyperion_server
+  gather_facts: yes
+  roles:
+    - role: prereq
+      become: true
+    - role: hyperion/server
+      become: true
+    - role: hyperion/post
+      become: true

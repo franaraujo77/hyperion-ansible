@@ -1,0 +1,25 @@
+---    
+
+- name: Add hyperion key and repo
+  block:
+    - name: hyperion | dowload apt key
+      ansible.builtin.get_url:
+        url: https://apt.hyperion-project.org/hyperion.pub.key
+        dest: /usr/share/keyrings/hyperion.pub.gpg
+
+    - name: hyperion | import apt key
+      ansible.builtin.apt_key:
+        url: https://apt.hyperion-project.org/hyperion.pub.key
+        state: present
+
+    - name: hyperion | apt source
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/hyperion.pub.gpg] https://apt.hyperion-project.org/ {{ ansible_distribution_release }} main"
+        state: present
+        filename: hyperion
+
+- name: Install specific packages
+  package:
+    name:
+      - hyperion
+    state: latest

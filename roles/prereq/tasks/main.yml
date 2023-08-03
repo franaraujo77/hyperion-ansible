@@ -1,0 +1,31 @@
+---
+- name: Set same timezone on every Server
+  timezone:
+    name: "{{ system_timezone }}"
+  when: (system_timezone is defined) and (system_timezone != "Your/Timezone")
+
+- name: Set SELinux to disabled state
+  selinux:
+    state: disabled
+  when: ansible_os_family == "RedHat"
+
+- name: Update Package Cache (apt/Ubuntu)
+  tags: always
+  apt:
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "Ubuntu"
+
+- name: Update Package Cache (dnf/CentOS)
+  tags: always
+  dnf:
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "CentOS"
+
+- name: Update Package Cache (yum/Amazon)
+  tags: always
+  yum:
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "Amazon"
